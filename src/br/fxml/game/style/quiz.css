@@ -1,0 +1,6 @@
+.quiz-pane {
+    -fx-background-image: url("images/florest.jpg");
+    -fx-background-position: right;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}

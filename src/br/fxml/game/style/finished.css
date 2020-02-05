@@ -1,0 +1,6 @@
+.finished-pane {
+    -fx-background-image: url("images/sun-rising.jpg");
+    -fx-background-position: left;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}

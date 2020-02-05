@@ -1,0 +1,6 @@
+.brief-pane {
+    -fx-background-image: url("images/mountain3.jpg");
+    -fx-background-position: left;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}

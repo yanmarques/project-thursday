@@ -1,0 +1,153 @@
+DROP TABLE IF EXISTS teacher;
+CREATE TABLE teacher (
+	id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT teacher_PK PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS class;
+CREATE TABLE class (
+	id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT class_PK PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS subject;
+CREATE TABLE subject (
+	id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT subject_PK PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS curiosity;
+CREATE TABLE curiosity (
+	id INTEGER NOT NULL,
+	description TEXT NOT NULL,
+	subject_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT curiosity_PK PRIMARY KEY (id),
+	CONSTRAINT curiosity_subject_FK FOREIGN KEY (subject_id) REFERENCES subject(id)
+);
+
+DROP TABLE IF EXISTS selection_rule;
+CREATE TABLE selection_rule (
+	id INTEGER NOT NULL,
+	image_path TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT selection_rule_PK PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS selection_rule_subject;
+CREATE TABLE selection_rule_subject (
+	selection_rule_id INTEGER NOT NULL,
+	subject_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT selection_rule_subject_PK PRIMARY KEY (selection_rule_id, subject_id),
+	CONSTRAINT selection_rule_subject_selection_rule_FK FOREIGN KEY (selection_rule_id) REFERENCES selection_rule(id),
+	CONSTRAINT selection_rule_subject_FK FOREIGN KEY (subject_id) REFERENCES subject(id)
+);
+
+DROP TABLE IF EXISTS teacher_class;
+CREATE TABLE teacher_class (
+	teacher_id INTEGER NOT NULL,
+	class_id TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT teacher_class_PK PRIMARY KEY (teacher_id,class_id),
+	CONSTRAINT teacher_class_FK FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+	CONSTRAINT class_teacher_FK FOREIGN KEY (class_id) REFERENCES class(id)
+);
+
+DROP TABLE IF EXISTS teacher_class_subject;
+CREATE TABLE teacher_class_subject (
+	teacher_id INTEGER NOT NULL,
+	class_id INTEGER NOT NULL,
+	subject_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT teacher_class_subject_PK PRIMARY KEY (teacher_id,class_id,subject_id),
+	CONSTRAINT teacher_class_subject_FK FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+	CONSTRAINT class_teacher_subject_FK FOREIGN KEY (class_id) REFERENCES class(id),
+	CONSTRAINT subject_teacher_class FOREIGN KEY (subject_id) REFERENCES subject(id)
+);
+
+DROP TABLE IF EXISTS alumn;
+CREATE TABLE alumn (
+	id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	score NUMERIC DEFAULT 0,
+	teacher_id INTEGER NOT NULL,
+	class_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT alumn_PK PRIMARY KEY (id),
+	CONSTRAINT alumn_teacher_FK FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+	CONSTRAINT alumn_class_FK FOREIGN KEY (class_id) REFERENCES class(id)
+);
+
+DROP TABLE IF EXISTS choice;
+CREATE TABLE choice (
+	id INTEGER NOT NULL,
+	alumn_id INTEGER NOT NULL,
+	selection_rule_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT choice_PK PRIMARY KEY (id),
+	CONSTRAINT choice_alumn_FK FOREIGN KEY (alumn_id) REFERENCES alumn(id),
+	CONSTRAINT choice_selection_rule_FK FOREIGN KEY (selection_rule_id) REFERENCES selection_rule(id)
+);
+
+DROP TABLE IF EXISTS answer;
+CREATE TABLE answer (
+	id INTEGER NOT NULL,
+	quiz_id INTEGER NOT NULL,
+	description TEXT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT answer_PK PRIMARY KEY (id),
+	CONSTRAINT answer_FK FOREIGN KEY (quiz_id) REFERENCES quiz(id)
+);
+
+DROP TABLE IF EXISTS quiz;
+CREATE TABLE quiz (
+	id INTEGER NOT NULL,
+	question TEXT NOT NULL,
+	score NUMERIC NOT NULL,
+	score_avaliation TEXT NOT NULL,
+	subject_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT quiz_PK PRIMARY KEY (id),
+	CONSTRAINT quiz_subject_FK FOREIGN KEY (subject_id) REFERENCES subject(id)
+);
+
+DROP TABLE IF EXISTS correct_answer;
+CREATE TABLE correct_answer (
+	quiz_id INTEGER NOT NULL,
+	answer_id INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT correct_answer_PK PRIMARY KEY (quiz_id,answer_id),
+	CONSTRAINT correct_answer_quiz_FK FOREIGN KEY (quiz_id) REFERENCES quiz(id),
+	CONSTRAINT correct_answer_answer_FK FOREIGN KEY (answer_id) REFERENCES answer(id)
+);
+
+DROP TABLE IF EXISTS configuration;
+CREATE TABLE configuration (
+	id INTEGER NOT NULL,
+	rule_action TEXT NOT NULL,
+	hide_teachers BOOLEAN NOT NULL,
+	display_rules_by_class BOOLEAN NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT configuration_PK PRIMARY KEY (id)
+);

@@ -1,0 +1,36 @@
+.main-pane {
+    -fx-background-image: url("images/mountain5_background.png");
+    -fx-background-position: bottom;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-color: #ffffff;
+}
+
+.player-pane {
+    -fx-background-image: url("images/mountain6.png");
+    -fx-background-position: center-right;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: auto;
+    -fx-background-color: #f5f8ed;
+}
+
+.title-text {
+    -fx-font-size: 140%;
+    -fx-font-weight: 800;
+}
+
+Button {
+    -fx-font-size: 140%;
+    -fx-font-weight: 800;
+    -fx-text-fill: #f5f8ed;
+    -fx-background-color: #037730;
+    -fx-cursor: hand;
+}
+
+.button {
+    -fx-cursor: hand;
+}
+
+.img-choice {
+    -fx-cursor: hand;
+}
